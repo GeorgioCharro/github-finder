@@ -1,10 +1,12 @@
 
 import UserResults from "../components/users/UserResults"
+import UserSearch from "../components/users/UserSearch"
+import Alert from "../components/layout/Alert"
 function Home() {
   return (
     <div>
-      
-      <h1 className="text-6xl my-10">Welcome</h1>
+      <Alert />
+      <UserSearch />
       <UserResults />
     </div>
   )

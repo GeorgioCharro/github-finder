@@ -19,20 +19,15 @@ switch(action.type){
       ...state,
       users:action.payload
     }
-    case('FETCH_USER'):
+    case('FETCH_USER_AND_PAYLOAD'):
     return {
 
       ...state,
-      user:action.payload,
+      user:action.payload.user,
+      repos:action.payload.repos,
       isLoading: false,
     }
-    case('GET_REPOS'):
-    return {
-      ...state,
-      repos:action.payload,
-      isLoading:false
-
-    }
+    
       
 
 

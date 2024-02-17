@@ -1,9 +1,10 @@
 import {useState,useContext} from 'react'
 import GithubContext from '../../context/github/GitHubContext'
 import AlertContext from '../../context/alert/AlertContext'
+import {fetchSearchedUsers} from '../../context/github/GitHubAction'
 function UserSearch() {
    const {setAlert} = useContext(AlertContext)
-   const {users,fetchSearchedUsers,clearUsers} = useContext(GithubContext)
+   const {users,dispatch} = useContext(GithubContext)
    const[text,setText]=useState('')
 
    const handTextChange=(e)=>{
@@ -11,7 +12,7 @@ function UserSearch() {
     setText(e.target.value)
    }
 
-   const submitText = (e)=>{
+   const submitText = async(e)=>{
 
     e.preventDefault()
 
@@ -19,9 +20,14 @@ function UserSearch() {
 
       setAlert('Please write something','error')
 
-    }else {setText('')
-    fetchSearchedUsers(text)}
-
+    }else {
+      
+    dispatch({type:'SET_LOADING'})
+    const usersFetched = await fetchSearchedUsers(text)
+    dispatch({type:'GET_USERS', payload:usersFetched})
+    setText('')
+  }
+    
     
    }
 
@@ -47,7 +53,7 @@ function UserSearch() {
 
       </div>
       {users.length>0 && (<div>
-        <button onClick={clearUsers}className="btn btn-ghost btn-lg">Clear</button>
+        <button onClick={()=>{dispatch({type:'CLEAR_USERS',payload:[]})}}className="btn btn-ghost btn-lg">Clear</button>
       </div>)}
     </div>
   )

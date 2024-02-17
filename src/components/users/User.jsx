@@ -5,13 +5,24 @@ import { useParams } from 'react-router-dom'
 import {FaCodepen,FaStore,FaUserFriends,FaUsers} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import Spinner from '../layout/Spinner'
+import RepoList from '../repos/RepoList'
+import {getUserAndRepos} from '../../context/github/GitHubAction'
+
 function User() {
     const params= useParams()
-    const {user,fetchUser,loading}=useContext(GithubContext)
+    const {user,loading,repos,dispatch}=useContext(GithubContext)
 
     useEffect(()=>{
+        const getUserDataAndRepos = async()=>{
+          
+        dispatch({type:'SET_LOADING'})
+        const fetchedUsers =  await getUserAndRepos(params.login)
+        dispatch({type:'FETCH_USER_AND_PAYLOAD',payload:fetchedUsers})}
+        
+        
+        getUserDataAndRepos()
 
-        fetchUser(params.login)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     const{
@@ -94,7 +105,7 @@ else{
              (<div className='stat'>
                 <div className="stat-title text-md">Twitter
                   <div className="text-lg stat-value">
-                    <a href={`https://twitter.com/${twitter_username}`} target='_blank' rel='noreffer'>{twitter_username}</a>
+                    <a href={`https://twitter.com/${twitter_username}`} target='_blank' rel='norefferer'>{twitter_username}</a>
                   </div>
                 </div>
                </div>)}
@@ -149,7 +160,9 @@ else{
             {public_gists}
           </div>
         </div>
+
       </div>
+      <RepoList repos={repos} />
     </div>
       
 
